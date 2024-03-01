@@ -57,9 +57,11 @@ INSERT INTO status (status, description) VALUES
 
 INSERT INTO status_transition (current_status_code, next_status_code)
 VALUES ('READY_FOR_WASHING', 'IN_WASHING'),
-('IN_WASHING', 'IN_DRYING'),
-('IN_DRYING', 'READY_FOR_CUSTOMER'),
-('READY_FOR_CUSTOMER', 'PICKED_BY_CUSTOMER');
+       ('IN_WASHING', 'READY_FOR_WASHING'),
+       ('IN_WASHING', 'IN_DRYING'),
+       ('IN_DRYING', 'IN_WASHING'),
+       ('IN_DRYING', 'READY_FOR_CUSTOMER'),
+       ('READY_FOR_CUSTOMER', 'PICKED_BY_CUSTOMER');
 
 
 

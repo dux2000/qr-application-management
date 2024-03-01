@@ -14,8 +14,8 @@ public class ClothesFactory {
             clothesEntity.getId(), 
             clothesEntity.getName(), 
             clothesEntity.getSize(), 
-            clothesEntity.getColor(), 
-            new Status(clothesEntity.getStatus().getCode(), clothesEntity.getStatus().getDescription()),
+            clothesEntity.getColor(),
+            StatusFactory.fromStatusEntityToStatus(clothesEntity.getStatus()),
             new CustomerReference(clothesEntity.getCustomer().getId())
         );
     }

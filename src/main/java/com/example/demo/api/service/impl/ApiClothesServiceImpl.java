@@ -16,6 +16,11 @@ public class ApiClothesServiceImpl implements ApiClothesService {
     private ClothesService domainClothesService;
 
     @Override
+    public ClothesDto getClothesWithId(Long id) {
+        return ApiClothesFactory.fromClothesToDto(domainClothesService.getClothesWithId(id));
+    }
+
+    @Override
     public ClothesDto createClothes(Long customerId, ClothesCommand clothes) {
         return ApiClothesFactory.fromClothesToDto(domainClothesService.createClothes(customerId, ApiClothesFactory.fromCommandToClothes(clothes)));
     }
@@ -26,8 +31,8 @@ public class ApiClothesServiceImpl implements ApiClothesService {
     }
 
     @Override
-    public ClothesDto changeStatus(Long id) {
-        return ApiClothesFactory.fromClothesToDto(domainClothesService.changeStatus(id));
+    public ClothesDto changeStatus(Long id, String nextStatusCode) {
+        return ApiClothesFactory.fromClothesToDto(domainClothesService.changeStatus(id, nextStatusCode));
     }
     
 }

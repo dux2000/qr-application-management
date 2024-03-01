@@ -15,6 +15,11 @@ public class ClothesServiceImpl implements ClothesService {
     private ClothesRepository clothesRepository;
 
     @Override
+    public Clothes getClothesWithId(Long id) {
+        return clothesRepository.getClothesWithId(id);
+    }
+
+    @Override
     public Clothes createClothes(Long customerId, Clothes clothes) {
         clothes.setCustomer(new CustomerReference(customerId));
         return clothesRepository.createClothes(clothes);
@@ -26,8 +31,8 @@ public class ClothesServiceImpl implements ClothesService {
     }
 
     @Override
-    public Clothes changeStatus(Long id) {
-        return clothesRepository.changeStatus(id);
+    public Clothes changeStatus(Long id, String nextStatusCode) {
+        return clothesRepository.changeStatus(id, nextStatusCode);
     }
     
 }

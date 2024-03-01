@@ -1,7 +1,9 @@
 package com.example.demo.persistence.repository.impl;
 
+import java.util.List;
 import java.util.Optional;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,8 @@ import com.example.demo.persistence.repository.StatusEntityRespository;
 import com.example.demo.persistence.repository.StatusTransitionRepository;
 import com.example.demo.persistence.repository.factory.ClothesFactory;
 
+import javax.swing.text.html.Option;
+
 @Repository
 public class ClothesRepositoryImpl implements ClothesRepository {
 
@@ -33,6 +37,15 @@ public class ClothesRepositoryImpl implements ClothesRepository {
 
     @Autowired
     private StatusTransitionRepository statusTransitionRepository;
+
+    @Override
+    public Clothes getClothesWithId(Long id) {
+        Optional<ClothesEntity> clothesEntity = clothesEntityRepository.findById(id);
+
+        if (clothesEntity.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no clothes with that id!");
+
+        return ClothesFactory.fromClothesEntityToClothes(clothesEntity.get());
+    }
 
     @Override
     public Clothes createClothes(Clothes clothes) {
@@ -53,16 +66,18 @@ public class ClothesRepositoryImpl implements ClothesRepository {
     }
 
     @Override
-    public Clothes changeStatus(Long id) {
+    @Transactional
+    public Clothes changeStatus(Long id, String nextStatusCode) {
         Optional<ClothesEntity> clothesEntity = clothesEntityRepository.findById(id);
 
         if (clothesEntity.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no clothes with that id!");
         
-        StatusTransitionEntity statusTransitionEntity = statusTransitionRepository.findByCurrentStatusCode(clothesEntity.get().getStatus().getCode());
-        if(statusTransitionEntity != null) {
-            StatusEntity nextStatus = statusTransitionEntity.getNextStatus();
-            clothesEntity.get().setStatus(nextStatus);
-        }
+        List<StatusTransitionEntity> statusTransitionEntity = statusTransitionRepository.findByCurrentStatusCode(clothesEntity.get().getStatus().getCode()).stream().filter(statusTransition -> statusTransition.getNextStatus().getCode().equals(nextStatusCode)).toList();
+        if (statusTransitionEntity.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid next status!");
+
+        StatusEntity nextStatus = statusTransitionEntity.get(0).getNextStatus();
+        clothesEntity.get().setStatus(nextStatus);
+
 
         return ClothesFactory.fromClothesEntityToClothes(clothesEntityRepository.save(clothesEntity.get()));
 

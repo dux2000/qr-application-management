@@ -1,13 +1,7 @@
 package com.example.demo.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.api.command.ClothesCommand;
 import com.example.demo.api.dto.ClothesDto;
@@ -20,6 +14,11 @@ public class ClothesController {
     @Autowired
     private ApiClothesService apiClothesService;
 
+    @GetMapping("/{id}")
+    public ClothesDto getClothesWithId(@PathVariable Long id) {
+        return apiClothesService.getClothesWithId(id);
+    }
+
     @PostMapping("/{customerId}")
     public ClothesDto createClothes(@PathVariable Long customerId, @RequestBody ClothesCommand clothes) {
         return apiClothesService.createClothes(customerId, clothes);
@@ -30,8 +29,8 @@ public class ClothesController {
         apiClothesService.deleteClothes(id);
     }
 
-    @PutMapping("/{id}/next-status")
-    public ClothesDto changeStatus(@PathVariable Long id) {
-        return apiClothesService.changeStatus(id);
+    @PutMapping("/{id}/{nextStatusCode}")
+    public ClothesDto changeStatus(@PathVariable Long id, @PathVariable String nextStatusCode) {
+        return apiClothesService.changeStatus(id, nextStatusCode);
     }
 }
