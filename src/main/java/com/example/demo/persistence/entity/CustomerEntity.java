@@ -1,7 +1,5 @@
 package com.example.demo.persistence.entity;
 
-
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,14 +46,4 @@ public class CustomerEntity {
     private Set<ClothesEntity> clothes = new HashSet<>();
 
     private LocalDateTime deleted;
-
-    public void addClothes(ClothesEntity clothes) {
-        this.clothes.add(clothes);
-        clothes.setCustomer(this);
-    }
-    
-    public void removeClothes(ClothesEntity clothes) {
-        this.clothes.remove(clothes);
-        clothes.setCustomer(null);
-    }
 }

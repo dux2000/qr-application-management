@@ -40,6 +40,17 @@ CREATE TABLE status (
   description VARCHAR(255)
 );
 
+CREATE TABLE user (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255),
+    fullname VARCHAR(255),
+    password VARCHAR(255),
+    role VARCHAR(50),
+    created TIMESTAMP,
+    updated TIMESTAMP,
+    deleted TIMESTAMP
+);
+
 INSERT INTO status (status, description) VALUES
   ('READY_FOR_WASHING', 'Clothes are ready to be washed'),
   ('IN_WASHING', 'Clothes are currently being washed'),
