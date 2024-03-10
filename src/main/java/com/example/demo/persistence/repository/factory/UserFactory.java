@@ -25,6 +25,7 @@ public class UserFactory {
             return null;
 
         User user = new User();
+        user.setId(userEntity.getId());
         user.setUsername(userEntity.getUsername());
         user.setFullName(userEntity.getFullName());
         user.setPassword(userEntity.getPassword());

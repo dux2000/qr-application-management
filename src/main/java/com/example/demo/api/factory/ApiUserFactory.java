@@ -11,6 +11,7 @@ public class ApiUserFactory {
             return null;
 
         UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
         userDto.setFullName(user.getFullName());
         userDto.setCreated(user.getCreated());
