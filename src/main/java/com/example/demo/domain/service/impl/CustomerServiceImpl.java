@@ -1,13 +1,7 @@
 package com.example.demo.domain.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
+import com.example.demo.domain.filter.SearchRequest;
+import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.Clothes;
 import com.example.demo.domain.model.Contact;
 import com.example.demo.domain.model.Customer;
@@ -16,22 +10,30 @@ import com.example.demo.domain.repository.ClothesRepository;
 import com.example.demo.domain.repository.ContactRepository;
 import com.example.demo.domain.repository.CustomerRepository;
 import com.example.demo.domain.service.CustomerService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
-    
-    @Autowired
-    private CustomerRepository customerRepository;
 
-    @Autowired
-    private ClothesRepository clothesRepository;
-
-    @Autowired
-    private ContactRepository contactRepository;
+    private final CustomerRepository customerRepository;
+    private final ClothesRepository clothesRepository;
+    private final ContactRepository contactRepository;
 
     @Override
     public List<Customer> getCustomers() {
         return customerRepository.getCustomers();
+    }
+
+    @Override
+    public SearchResponse<Customer> getCustomersFilter(SearchRequest request) {
+        return customerRepository.getCustomersFilter(request);
     }
 
     @Override

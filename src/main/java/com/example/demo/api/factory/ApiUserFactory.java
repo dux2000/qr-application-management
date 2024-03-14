@@ -2,7 +2,6 @@ package com.example.demo.api.factory;
 
 import com.example.demo.api.command.UserCommand;
 import com.example.demo.api.dto.UserDto;
-import com.example.demo.domain.model.Role;
 import com.example.demo.domain.model.User;
 
 public class ApiUserFactory {

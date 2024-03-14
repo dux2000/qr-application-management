@@ -4,15 +4,15 @@ public enum SearchOperation {
     CONTAINS, DOES_NOT_CONTAIN, EQUAL, NOT_EQUAL, BEGINS_WITH,
     DOES_NOT_BEGIN_WITH, ENDS_WITH, DOES_NOT_END_WITH,
     NUL, NOT_NULL, GREATER_THAN, GREATER_THAN_EQUAL, LESS_THAN,
-    LESS_THAN_EQUAL, ANY, ALL;    public static final String[] SIMPLE_OPERATION_SET = {
+    LESS_THAN_EQUAL, AND, OR;    public static final String[] SIMPLE_OPERATION_SET = {
             "cn", "nc", "eq", "ne", "bw", "bn", "ew",
             "en", "nu", "nn", "gt", "ge", "lt", "le" };
 
     public static SearchOperation getDataOption(final String
                                                         dataOption){
         switch(dataOption){
-            case "all": return ALL;
-            case "any": return ANY;
+            case "and": return AND;
+            case "or": return OR;
             default: return null;
         }
     }

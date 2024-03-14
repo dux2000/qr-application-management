@@ -1,8 +1,9 @@
 package com.example.demo.persistence.repository.impl;
 
+import com.example.demo.domain.filter.SearchRequest;
+import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.User;
 import com.example.demo.domain.repository.UserRepository;
-import com.example.demo.persistence.entity.CustomerEntity;
 import com.example.demo.persistence.entity.UserEntity;
 import com.example.demo.persistence.repository.UserEntityRepository;
 import com.example.demo.persistence.repository.factory.UserFactory;
@@ -19,6 +20,11 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserEntityRepository userEntityRepository;
+
+    @Override
+    public SearchResponse<User> getUsers(SearchRequest request) {
+        return request.fetchAndConvert(userEntityRepository, UserFactory::fromUserEntityToUser);
+    }
 
     @Override
     public User createUser(User user) {

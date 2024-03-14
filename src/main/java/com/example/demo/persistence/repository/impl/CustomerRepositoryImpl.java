@@ -1,35 +1,37 @@
 package com.example.demo.persistence.repository.impl;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.domain.filter.SearchRequest;
+import com.example.demo.domain.filter.SearchResponse;
+import com.example.demo.domain.model.Customer;
+import com.example.demo.domain.repository.CustomerRepository;
+import com.example.demo.persistence.entity.CustomerEntity;
+import com.example.demo.persistence.repository.CustomerEntityRepository;
+import com.example.demo.persistence.repository.factory.CustomerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.demo.domain.model.Customer;
-import com.example.demo.domain.repository.CustomerRepository;
-import com.example.demo.persistence.entity.CustomerEntity;
-
-
-
-import com.example.demo.persistence.repository.CustomerEntityRepository;
-import com.example.demo.persistence.repository.factory.CustomerFactory;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 
 @Repository
-
+@RequiredArgsConstructor
 public class CustomerRepositoryImpl implements CustomerRepository {
 
-    @Autowired
-    private CustomerEntityRepository customerEntityRepository;
+    private final CustomerEntityRepository customerEntityRepository;
     
 
     @Override
     public List<Customer> getCustomers() {
         return customerEntityRepository.findAll().stream().map(CustomerFactory::fromCustomerEntityToCustomer).toList();
+    }
+
+    @Override
+    public SearchResponse<Customer> getCustomersFilter(SearchRequest request) {
+        return request.fetchAndConvert(customerEntityRepository, CustomerFactory::fromCustomerEntityToCustomer);
     }
 
     @Override

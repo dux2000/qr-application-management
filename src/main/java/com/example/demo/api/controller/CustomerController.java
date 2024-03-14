@@ -1,24 +1,25 @@
 package com.example.demo.api.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.api.command.CustomerCommand;
 import com.example.demo.api.dto.CustomerDto;
 import com.example.demo.api.service.ApiCustomerService;
+import com.example.demo.domain.filter.SearchRequest;
+import com.example.demo.domain.filter.SearchResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/customers")
+@RequiredArgsConstructor
 public class CustomerController {
 
-    @Autowired
-    private ApiCustomerService apiCustomerService;
+    private final ApiCustomerService apiCustomerService;
     
     @GetMapping("")
-    public List<CustomerDto> getUsers() {
-        return apiCustomerService.getUsers();
+    public List<CustomerDto> getCustomers() {
+        return apiCustomerService.getCustomers();
     }
 
     @GetMapping("/{id}")
@@ -26,6 +27,10 @@ public class CustomerController {
         return apiCustomerService.getCustomerWithId(id);
     }
 
+    @PostMapping("/filter")
+    public SearchResponse<CustomerDto> getCustomers(@RequestBody SearchRequest request) {
+        return apiCustomerService.getCustomersFilter(request);
+    }
     @PostMapping("")
     public CustomerDto createCustomer(@RequestBody CustomerCommand customer) {
         return apiCustomerService.createCustomer(customer);

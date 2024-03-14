@@ -1,12 +1,5 @@
 package com.example.demo.persistence.repository.impl;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.example.demo.domain.model.Contact;
 import com.example.demo.domain.repository.ContactRepository;
 import com.example.demo.persistence.entity.ContactEntity;
@@ -14,6 +7,12 @@ import com.example.demo.persistence.entity.CustomerEntity;
 import com.example.demo.persistence.repository.ContactEntityRepository;
 import com.example.demo.persistence.repository.CustomerEntityRepository;
 import com.example.demo.persistence.repository.factory.ContactFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Repository
 public class ContactRepositoryImpl implements ContactRepository {

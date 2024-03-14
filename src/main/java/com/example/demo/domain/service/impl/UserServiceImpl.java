@@ -1,5 +1,7 @@
 package com.example.demo.domain.service.impl;
 
+import com.example.demo.domain.filter.SearchRequest;
+import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.User;
 import com.example.demo.domain.repository.UserRepository;
 import com.example.demo.domain.service.UserService;
@@ -14,6 +16,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    @Override
+    public SearchResponse<User> getUsers(SearchRequest request) {
+        return userRepository.getUsers(request);
+    }
 
     @Override
     public User createUser(User user) {

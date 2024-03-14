@@ -2,7 +2,6 @@ package com.example.demo.persistence.repository.factory;
 
 import com.example.demo.domain.model.Clothes;
 import com.example.demo.domain.model.CustomerReference;
-import com.example.demo.domain.model.Status;
 import com.example.demo.persistence.entity.ClothesEntity;
 
 public class ClothesFactory {

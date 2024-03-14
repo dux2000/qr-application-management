@@ -1,12 +1,11 @@
 package com.example.demo.domain.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.demo.domain.model.Clothes;
 import com.example.demo.domain.model.CustomerReference;
 import com.example.demo.domain.repository.ClothesRepository;
 import com.example.demo.domain.service.ClothesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ClothesServiceImpl implements ClothesService {

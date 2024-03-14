@@ -1,10 +1,12 @@
 package com.example.demo.domain.repository;
 
+import com.example.demo.domain.filter.SearchRequest;
+import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.User;
 
-import java.util.Optional;
 
 public interface UserRepository {
+    SearchResponse<User> getUsers(SearchRequest request);
     User createUser(User user);
     User getUserByUsername(String username);
     User updateUser(User user);
