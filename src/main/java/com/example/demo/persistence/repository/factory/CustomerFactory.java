@@ -11,8 +11,7 @@ public class CustomerFactory {
 
         return new Customer(
                 customerEntity.getId(), 
-                customerEntity.getName(), 
-                customerEntity.getSurname(),
+                customerEntity.getFullName(),
                 customerEntity.getClothes() == null ? null : customerEntity.getClothes().stream().map(ClothesFactory::fromClothesEntityToClothes).toList(),
                 customerEntity.getContacts() == null ? null : customerEntity.getContacts().stream().map(ContactFactory::fromContactEntityToContact).toList()
             );
@@ -24,8 +23,7 @@ public class CustomerFactory {
         
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setId(customer.getId());
-        customerEntity.setName(customer.getName());
-        customerEntity.setSurname(customer.getSurname());
+        customerEntity.setFullName(customer.getFullName());
 
         return customerEntity;
         

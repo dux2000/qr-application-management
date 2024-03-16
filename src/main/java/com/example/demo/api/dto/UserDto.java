@@ -11,5 +11,6 @@ public class UserDto {
     private Long id;
     private String username;
     private String fullName;
+    private String role;
     private LocalDateTime created;
 }

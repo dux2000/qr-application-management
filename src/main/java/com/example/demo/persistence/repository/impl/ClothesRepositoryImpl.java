@@ -8,7 +8,7 @@ import com.example.demo.persistence.entity.StatusEntity;
 import com.example.demo.persistence.entity.StatusTransitionEntity;
 import com.example.demo.persistence.repository.ClothesEntityRepository;
 import com.example.demo.persistence.repository.CustomerEntityRepository;
-import com.example.demo.persistence.repository.StatusEntityRespository;
+import com.example.demo.persistence.repository.StatusEntityRepository;
 import com.example.demo.persistence.repository.StatusTransitionRepository;
 import com.example.demo.persistence.repository.factory.ClothesFactory;
 import jakarta.transaction.Transactional;
@@ -30,7 +30,7 @@ public class ClothesRepositoryImpl implements ClothesRepository {
     private CustomerEntityRepository customerEntityRepository;
 
     @Autowired
-    private StatusEntityRespository statusEntityRespository;
+    private StatusEntityRepository statusEntityRepository;
 
     @Autowired
     private StatusTransitionRepository statusTransitionRepository;
@@ -52,7 +52,7 @@ public class ClothesRepositoryImpl implements ClothesRepository {
         
         ClothesEntity clothesEntity = ClothesFactory.fromClothesToClothesEntity(clothes);
         clothesEntity.setCustomer(customerEntity.get());
-        StatusEntity statusEntity = statusEntityRespository.findById(Long.valueOf(1)).get();
+        StatusEntity statusEntity = statusEntityRepository.findById(Long.valueOf(1)).get();
         clothesEntity.setStatus(statusEntity);
         return ClothesFactory.fromClothesEntityToClothes(clothesEntityRepository.save(clothesEntity));
     }

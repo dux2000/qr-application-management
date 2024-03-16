@@ -20,9 +20,8 @@ public class CustomerEntity {
     @Column(columnDefinition = "serial")
     private Long id;
 
-    private String name;
-
-    private String surname;
+    @Column(name = "fullname")
+    private String fullName;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
     private Set<ContactEntity> contacts = new HashSet<>();

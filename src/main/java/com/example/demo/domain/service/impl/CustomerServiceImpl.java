@@ -89,10 +89,8 @@ public class CustomerServiceImpl implements CustomerService {
     private void validateCustomer(Customer customer) {
         if (customer == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer must not be null.");
-        } else if(customer.getName() == null || customer.getName().isEmpty()) {
+        } else if(customer.getFullName() == null || customer.getFullName().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer name attribute must not be empty.");
-        } else if (customer.getSurname() == null || customer.getSurname().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer surname attribute must not be empty.");
         }
     }
 }

@@ -39,6 +39,8 @@ public class CustomSpecification<T> implements Specification<T> {
                     return cb.notEqual(root.get(searchCriteria.getFilterKey()).as(LocalDateTime.class), LocalDateTime.parse(valueToSearch.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 }
                 return cb.equal(root.get(searchCriteria.getFilterKey()), valueToSearch);
+            case NUL:
+                return cb.isNull(root.get(searchCriteria.getFilterKey()));
         }
 
         return null;

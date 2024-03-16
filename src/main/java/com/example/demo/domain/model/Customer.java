@@ -9,8 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Customer {
     private Long id;
-    private String name;
-    private String surname;
+    private String fullName;
     private List<Clothes> clothes;
     private List<Contact> contacts;
 }

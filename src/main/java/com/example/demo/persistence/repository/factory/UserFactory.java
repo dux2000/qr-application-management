@@ -30,6 +30,7 @@ public class UserFactory {
         user.setFullName(userEntity.getFullName());
         user.setPassword(userEntity.getPassword());
         user.setCreated(userEntity.getCreated());
+        user.setRole(userEntity.getRole());
 
         return user;
     }

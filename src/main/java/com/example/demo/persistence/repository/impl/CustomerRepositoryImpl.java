@@ -57,9 +57,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     
     @Override
     public Customer updateCustomer(Customer customer) {
+
         CustomerEntity customerEntity = testIfCustomerExists(customer.getId());
-        customerEntity.setName(customer.getName() == null ? customerEntity.getName() : customer.getName());
-        customerEntity.setSurname(customer.getSurname() == null ? customerEntity.getSurname() : customer.getSurname());
+        customerEntity.setFullName(customer.getFullName() == null ? customerEntity.getFullName() : customer.getFullName());
         return CustomerFactory.fromCustomerEntityToCustomer(customerEntityRepository.save(customerEntity));
     }
 
