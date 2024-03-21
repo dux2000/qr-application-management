@@ -16,9 +16,13 @@ public class ProductFactory {
         product.setDescription(productEntity.getDescription());
         product.setStatus(StatusFactory.fromStatusEntityToStatus(productEntity.getStatus()));
         product.setCustomer(new CustomerReference(productEntity.getCustomer().getId()));
-        product.setUser(new UserReference(productEntity.getUser().getId()));
+        product.setUser(new UserReference(productEntity.getUser().getId(), productEntity.getUser().getFullName()));
         product.setCreated(productEntity.getCreated());
         product.setUpdated(productEntity.getUpdated());
+
+        if (productEntity.getCharacteristics() != null && !productEntity.getCharacteristics().isEmpty()) {
+            product.setCharacteristics(productEntity.getCharacteristics().stream().map(CharacteristicFactory::fromCharacteristicEntityToCharacteristic).toList());
+        }
 
         return product;
     }

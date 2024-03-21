@@ -7,4 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserReference {
     private Long id;
+    private String fullName;
+
+    public UserReference(Long id) {
+        this.id = id;
+    }
 }

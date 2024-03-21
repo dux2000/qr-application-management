@@ -1,5 +1,7 @@
 package com.example.demo.domain.service.impl;
 
+import com.example.demo.domain.filter.SearchRequest;
+import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.*;
 import com.example.demo.domain.repository.CharacteristicRepository;
 import com.example.demo.domain.repository.ProductRepository;
@@ -16,6 +18,12 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CharacteristicRepository characteristicRepository;
+
+    @Override
+    public SearchResponse<Product> getProductsFilter(SearchRequest request) {
+        return productRepository.getProductsFilter(request);
+    }
+
     @Override
     public Product createProduct(Long customerId, Long userId, Product product) {
         product.setCustomer(new CustomerReference(customerId));

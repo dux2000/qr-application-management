@@ -31,8 +31,10 @@ public class ApiProductFactory {
         productDto.setCreated(product.getCreated());
         productDto.setUpdated(product.getUpdated());
         productDto.setCustomer(new CustomerReferenceDto(product.getCustomer().getId()));
-        productDto.setUser(new UserReferenceDto(product.getUser().getId()));
-        productDto.setCharacteristics(product.getCharacteristics().stream().map(ApiProductFactory::toCharacteristicDto).toList());
+        productDto.setUser(new UserReferenceDto(product.getUser().getId(), product.getUser().getFullName()));
+
+        if (product.getCharacteristics() != null && !product.getCharacteristics().isEmpty())
+            productDto.setCharacteristics(product.getCharacteristics().stream().map(ApiProductFactory::toCharacteristicDto).toList());
 
         return productDto;
     }

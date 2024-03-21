@@ -1,9 +1,5 @@
 package com.example.demo.api.dto;
 
-import com.example.demo.domain.model.Characteristic;
-import com.example.demo.domain.model.CustomerReference;
-import com.example.demo.domain.model.Status;
-import com.example.demo.domain.model.UserReference;
 import lombok.Data;
 
 import java.time.LocalDateTime;
