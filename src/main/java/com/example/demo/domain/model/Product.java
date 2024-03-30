@@ -13,7 +13,9 @@ public class Product {
     private List<Characteristic> characteristics;
     private Status status;
     private CustomerReference customer;
-    private UserReference user;
+    private UserReference currentUser;
     private LocalDateTime created;
+    private UserReference createdBy;
     private LocalDateTime updated;
+    private UserReference updatedBy;
 }

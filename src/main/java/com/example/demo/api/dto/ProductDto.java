@@ -13,7 +13,9 @@ public class ProductDto {
     private List<CharacteristicDto> characteristics;
     private StatusDto status;
     private CustomerReferenceDto customer;
-    private UserReferenceDto user;
+    private UserReferenceDto currentUser;
     private LocalDateTime created;
     private LocalDateTime updated;
+    private UserReferenceDto createdBy;
+    private UserReferenceDto updatedBy;
 }

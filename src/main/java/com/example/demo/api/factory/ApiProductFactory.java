@@ -3,8 +3,7 @@ package com.example.demo.api.factory;
 import com.example.demo.api.command.CharacteristicCommand;
 import com.example.demo.api.command.ProductCommand;
 import com.example.demo.api.dto.*;
-import com.example.demo.domain.model.Characteristic;
-import com.example.demo.domain.model.Product;
+import com.example.demo.domain.model.*;
 
 public class ApiProductFactory {
     public static Product fromProductCommandToProduct(ProductCommand productCommand) {
@@ -13,7 +12,9 @@ public class ApiProductFactory {
         Product product = new Product();
         product.setName(productCommand.getName());
         product.setDescription(productCommand.getDescription());
-
+        product.setCustomer(new CustomerReference(productCommand.getCustomerId()));
+        product.setCurrentUser(new UserReference(productCommand.getCurrentUserId()));
+        product.setStatus(new Status(productCommand.getStatus()));
         if (productCommand.getCharacteristics() != null && !productCommand.getCharacteristics().isEmpty())
             product.setCharacteristics(productCommand.getCharacteristics().stream().map(ApiProductFactory::toCharacteristic).toList());
 
@@ -30,9 +31,12 @@ public class ApiProductFactory {
         productDto.setStatus(ApiStatusFactory.fromStatusToDto(product.getStatus()));
         productDto.setCreated(product.getCreated());
         productDto.setUpdated(product.getUpdated());
-        productDto.setCustomer(new CustomerReferenceDto(product.getCustomer().getId()));
-        productDto.setUser(new UserReferenceDto(product.getUser().getId(), product.getUser().getFullName()));
-
+        productDto.setCustomer(new CustomerReferenceDto(product.getCustomer().getId(), product.getCustomer().getFullName()));
+        productDto.setCurrentUser(new UserReferenceDto(product.getCurrentUser().getId(), product.getCurrentUser().getFullName(), product.getCurrentUser().getRole()));
+        productDto.setCreatedBy(new UserReferenceDto(product.getCreatedBy().getId(), product.getCreatedBy().getFullName(), product.getCreatedBy().getRole()));
+        if (product.getUpdatedBy() != null) {
+            productDto.setUpdatedBy(new UserReferenceDto(product.getUpdatedBy().getId(), product.getUpdatedBy().getFullName(), product.getUpdatedBy().getRole()));
+        }
         if (product.getCharacteristics() != null && !product.getCharacteristics().isEmpty())
             productDto.setCharacteristics(product.getCharacteristics().stream().map(ApiProductFactory::toCharacteristicDto).toList());
 

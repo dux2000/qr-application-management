@@ -20,20 +20,39 @@ public class ProductServiceImpl implements ProductService {
     private final CharacteristicRepository characteristicRepository;
 
     @Override
+    public Product getProductById(String id) {
+        return productRepository.getProductById(id);
+    }
+
+    @Override
+    public List<Product> getProductRevision(String id) {
+        return productRepository.getProductRevision(id);
+    }
+
+    @Override
     public SearchResponse<Product> getProductsFilter(SearchRequest request) {
         return productRepository.getProductsFilter(request);
     }
 
     @Override
-    public Product createProduct(Long customerId, Long userId, Product product) {
-        product.setCustomer(new CustomerReference(customerId));
-        product.setUser(new UserReference(userId));
+    public Product createProduct(Long userId, Product product) {
+        product.setCreatedBy(new UserReference(userId));
+        product.setCurrentUser(new UserReference(userId));
         product.setCreated(LocalDateTime.now());
         product.setStatus(new Status("CREATED"));
         Product createdProduct = productRepository.createProduct(product);
         saveCharacteristics(createdProduct, product.getCharacteristics());
 
         return createdProduct;
+    }
+
+    @Override
+    public Product updateProduct(String id, Long userId, Product product) {
+        product.setId(id);
+        product.setUpdatedBy(new UserReference(userId));
+        product.setUpdated(LocalDateTime.now());
+
+        return productRepository.updateProduct(product);
     }
 
     private void saveCharacteristics(Product product, List<Characteristic> characteristics) {

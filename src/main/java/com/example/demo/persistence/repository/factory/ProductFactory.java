@@ -15,11 +15,14 @@ public class ProductFactory {
         product.setName(productEntity.getName());
         product.setDescription(productEntity.getDescription());
         product.setStatus(StatusFactory.fromStatusEntityToStatus(productEntity.getStatus()));
-        product.setCustomer(new CustomerReference(productEntity.getCustomer().getId()));
-        product.setUser(new UserReference(productEntity.getUser().getId(), productEntity.getUser().getFullName()));
+        product.setCustomer(new CustomerReference(productEntity.getCustomer().getId(), productEntity.getCustomer().getFullName()));
+        product.setCurrentUser(new UserReference(productEntity.getCurrentUser().getId(), productEntity.getCurrentUser().getFullName(), productEntity.getCurrentUser().getRole()));
         product.setCreated(productEntity.getCreated());
         product.setUpdated(productEntity.getUpdated());
-
+        product.setCreatedBy(new UserReference(productEntity.getCreatedBy().getId(), productEntity.getCreatedBy().getFullName(), productEntity.getCreatedBy().getRole()));
+        if (productEntity.getUpdatedBy() != null) {
+            product.setUpdatedBy( new UserReference(productEntity.getUpdatedBy().getId(), productEntity.getUpdatedBy().getFullName(), productEntity.getUpdatedBy().getRole()));
+        }
         if (productEntity.getCharacteristics() != null && !productEntity.getCharacteristics().isEmpty()) {
             product.setCharacteristics(productEntity.getCharacteristics().stream().map(CharacteristicFactory::fromCharacteristicEntityToCharacteristic).toList());
         }

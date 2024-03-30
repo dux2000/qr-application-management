@@ -8,6 +8,7 @@ import lombok.Data;
 public class UserReference {
     private Long id;
     private String fullName;
+    private String role;
 
     public UserReference(Long id) {
         this.id = id;
