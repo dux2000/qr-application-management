@@ -9,9 +9,11 @@ public class ApiStatusFactory {
         if (status == null)
             return null;
 
-        return new StatusDto(
-            status.getCode(),
-            status.getDescription()
-        );
+        StatusDto statusDto = new StatusDto();
+        statusDto.setCode(status.getCode());
+        statusDto.setDescription(status.getDescription());
+        statusDto.setName(status.getName());
+
+        return statusDto;
     }
 }

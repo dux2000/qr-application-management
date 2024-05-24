@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Status {
     private String code;
     private String description;
-
+    private String name;
     public Status(String code) {
         this.code = code;
     }

@@ -36,6 +36,7 @@ CREATE TABLE clothes (
 CREATE TABLE status (
   id SERIAL PRIMARY KEY,
   code VARCHAR(40) NOT NULL UNIQUE,
+  name VARCHAR(40) NOT NULL,
   description VARCHAR(255)
 );
 
@@ -51,12 +52,12 @@ CREATE TABLE user (
     FOREIGN KEY (role) REFERENCES role (code)
 );
 
-INSERT INTO status (code, description) VALUES
-  ('READY_FOR_WASHING', 'Clothes are ready to be washed'),
-  ('IN_WASHING', 'Clothes are currently being washed'),
-  ('IN_DRYING', 'Clothes are currently drying'),
-  ('READY_FOR_CUSTOMER', 'Clothes are clean and ready for pick-up'),
-  ('PICKED_BY_CUSTOMER', 'Clothes have been picked up by the customer');
+INSERT INTO status (code, name, description) VALUES
+  ('READY_FOR_WASHING', 'Spremno', 'Clothes are ready to be washed'),
+  ('IN_WASHING', 'U pranju', 'Clothes are currently being washed'),
+  ('IN_DRYING', 'U sušenju', 'Clothes are currently drying'),
+  ('READY_FOR_CUSTOMER', 'Spremno za kupca', 'Clothes are clean and ready for pick-up'),
+  ('PICKED_BY_CUSTOMER', 'Kupac preuzeo','Clothes have been picked up by the customer');
 
   CREATE TABLE status_transition (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -110,8 +111,8 @@ CREATE TABLE characteristics_specification (
 );
 
 INSERT INTO characteristics_specification (code, global_code)
-VALUES ('BIJELO', 'ZLATO'),
-       ('ŽUTO', 'ZLATO'),
+VALUES ('VELICINA', 'VELICINA'),
+       ('BOJA', 'BOJA'),
        ('ROZO', 'ZLATO'),
        ('TEŽINA', 'TEŽINA'),
        ('ŠIRINA', 'ŠIRINA'),

@@ -18,6 +18,8 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.order.AuditOrder;
+import org.hibernate.query.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
@@ -47,6 +49,8 @@ public class ProductRepositoryImpl implements ProductRepository {
         List<ProductEntity> list = AuditReaderFactory.get(entityManager).createQuery()
                 .forRevisionsOfEntity(ProductEntity.class, true, false)
                 .add(AuditEntity.id().eq(UUID.fromString(id)))
+                .add(AuditEntity.property("updated").isNotNull())
+                .addOrder(AuditEntity.property("updated").desc())
                 .getResultList();
 
         return list.stream().map(ProductFactory::fromProductEntityToProduct).toList();

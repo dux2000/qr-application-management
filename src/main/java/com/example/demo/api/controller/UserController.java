@@ -17,6 +17,7 @@ public class UserController {
     public SearchResponse<UserDto> getUsers(@RequestBody SearchRequest request) {
         return apiUserService.getUsers(request);
     }
+
     @PostMapping("")
     public UserDto createUser(@RequestBody UserCommand user) {
         return apiUserService.createUser(user);

@@ -12,6 +12,7 @@ public class StatusFactory {
         Status status = new Status();
         status.setCode(statusEntity.getCode());
         status.setDescription(statusEntity.getDescription());
+        status.setName(statusEntity.getName());
 
         return status;
     }

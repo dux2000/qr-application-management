@@ -22,6 +22,7 @@ public class ProductController {
     public ProductDto getProductById(@PathVariable String id) {
         return apiProductService.getProductById(id);
     }
+
     @GetMapping("/revision/{id}")
     public List<ProductDto> getProductRevision(@PathVariable String id) {
         return apiProductService.getProductRevision(id);
