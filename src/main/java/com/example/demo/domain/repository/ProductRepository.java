@@ -4,6 +4,7 @@ package com.example.demo.domain.repository;
 import com.example.demo.domain.filter.SearchRequest;
 import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.Product;
+import com.example.demo.domain.model.ProductType;
 
 import java.util.List;
 
@@ -14,4 +15,7 @@ public interface ProductRepository {
 
     Product createProduct(Product product);
     Product updateProduct(Product product);
+    List<Product> getProductRevision(SearchRequest request);
+    List<ProductType> getProductTypes();
+    void deleteProduct(String id);
 }

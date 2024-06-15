@@ -1,10 +1,8 @@
 package com.example.demo.persistence.repository.factory;
 
-import com.example.demo.domain.model.CustomerReference;
-import com.example.demo.domain.model.Product;
-import com.example.demo.domain.model.ProductReference;
-import com.example.demo.domain.model.UserReference;
+import com.example.demo.domain.model.*;
 import com.example.demo.persistence.entity.ProductEntity;
+import com.example.demo.persistence.entity.ProductTypeEntity;
 
 public class ProductFactory {
     public static Product fromProductEntityToProduct(ProductEntity productEntity) {
@@ -26,7 +24,7 @@ public class ProductFactory {
         if (productEntity.getCharacteristics() != null && !productEntity.getCharacteristics().isEmpty()) {
             product.setCharacteristics(productEntity.getCharacteristics().stream().map(CharacteristicFactory::fromCharacteristicEntityToCharacteristic).toList());
         }
-
+       product.setType(toProductType(productEntity.getType()));
         return product;
     }
 
@@ -40,5 +38,15 @@ public class ProductFactory {
         productEntity.setUpdated(product.getUpdated());
 
         return productEntity;
+    }
+
+    public static ProductType toProductType(ProductTypeEntity productTypeEntity) {
+        if (productTypeEntity == null) return null;
+
+        ProductType productType = new ProductType();
+        productType.setCode(productTypeEntity.getCode());
+        productType.setName(productTypeEntity.getName());
+
+        return productType;
     }
 }

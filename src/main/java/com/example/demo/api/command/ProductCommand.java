@@ -11,5 +11,6 @@ public class ProductCommand {
     private Long customerId;
     private Long currentUserId;
     private String status;
+    private String type;
     private List<CharacteristicCommand> characteristics;
 }

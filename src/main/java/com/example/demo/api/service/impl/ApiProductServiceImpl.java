@@ -2,6 +2,7 @@ package com.example.demo.api.service.impl;
 
 import com.example.demo.api.command.ProductCommand;
 import com.example.demo.api.dto.ProductDto;
+import com.example.demo.api.dto.ProductTypeDto;
 import com.example.demo.api.factory.ApiProductFactory;
 import com.example.demo.api.service.ApiProductService;
 import com.example.demo.domain.filter.SearchRequest;
@@ -41,5 +42,20 @@ public class ApiProductServiceImpl implements ApiProductService {
     @Override
     public ProductDto updateProduct(String productId, Long userId, ProductCommand product) {
         return ApiProductFactory.fromProductToDto(productService.updateProduct(productId, userId, ApiProductFactory.fromProductCommandToProduct(product)));
+    }
+
+    @Override
+    public List<ProductDto> getProductRevision(SearchRequest request) {
+        return productService.getProductRevision(request).stream().map(ApiProductFactory::fromProductToDto).toList();
+    }
+
+    @Override
+    public List<ProductTypeDto> getProductTypes() {
+        return productService.getProductTypes().stream().map(ApiProductFactory::toProductTypeDto).toList();
+    }
+
+    @Override
+    public void deleteProduct(String id) {
+        productService.deleteProduct(id);
     }
 }

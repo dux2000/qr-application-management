@@ -27,7 +27,22 @@ public class CustomSpecification<T> implements Specification<T> {
                 if (type.equals(LocalDateTime.class)) {
                     return cb.greaterThanOrEqualTo(path.as(LocalDateTime.class), LocalDateTime.parse(valueToSearch.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 }
-                return cb.equal(path, valueToSearch);
+                return cb.greaterThanOrEqualTo(path.as(String.class), valueToSearch.toString());
+            case GREATER_THAN:
+                if (type.equals(LocalDateTime.class)) {
+                    return cb.greaterThan(path.as(LocalDateTime.class), LocalDateTime.parse(valueToSearch.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                }
+                return cb.greaterThan(path.as(String.class), valueToSearch.toString());
+            case LESS_THAN:
+                if (type.equals(LocalDateTime.class)) {
+                    return cb.lessThan(path.as(LocalDateTime.class), LocalDateTime.parse(valueToSearch.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                }
+                return cb.lessThan(path.as(String.class), valueToSearch.toString());
+            case LESS_THAN_EQUAL:
+                if (type.equals(LocalDateTime.class)) {
+                    return cb.lessThanOrEqualTo(path.as(LocalDateTime.class), LocalDateTime.parse(valueToSearch.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                }
+                return cb.lessThanOrEqualTo(path.as(String.class), valueToSearch.toString());
             case EQUAL:
                 if (type.equals(LocalDateTime.class)) {
                     return cb.equal(path.as(LocalDateTime.class), LocalDateTime.parse(valueToSearch.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
@@ -39,7 +54,7 @@ public class CustomSpecification<T> implements Specification<T> {
                 if (type.equals(LocalDateTime.class)) {
                     return cb.notEqual(path.as(LocalDateTime.class), LocalDateTime.parse(valueToSearch.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                 }
-                return cb.equal(path, valueToSearch);
+                return cb.notEqual(path, valueToSearch);
             case NUL:
                 return cb.isNull(path);
         }

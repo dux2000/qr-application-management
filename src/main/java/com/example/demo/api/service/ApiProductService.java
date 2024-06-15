@@ -3,6 +3,7 @@ package com.example.demo.api.service;
 
 import com.example.demo.api.command.ProductCommand;
 import com.example.demo.api.dto.ProductDto;
+import com.example.demo.api.dto.ProductTypeDto;
 import com.example.demo.domain.filter.SearchRequest;
 import com.example.demo.domain.filter.SearchResponse;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,4 +17,7 @@ public interface ApiProductService {
     SearchResponse<ProductDto> getProductsFilter(SearchRequest request);
     ProductDto createProduct(Long userId, ProductCommand product);
     ProductDto updateProduct(String productId, Long userId, ProductCommand product);
+    List<ProductDto> getProductRevision(SearchRequest request);
+    List<ProductTypeDto> getProductTypes();
+    void deleteProduct(String id);
 }

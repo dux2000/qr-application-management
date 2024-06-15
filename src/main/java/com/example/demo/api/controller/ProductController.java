@@ -2,6 +2,7 @@ package com.example.demo.api.controller;
 
 import com.example.demo.api.command.ProductCommand;
 import com.example.demo.api.dto.ProductDto;
+import com.example.demo.api.dto.ProductTypeDto;
 import com.example.demo.api.service.ApiProductService;
 import com.example.demo.domain.filter.SearchRequest;
 import com.example.demo.domain.filter.SearchResponse;
@@ -40,5 +41,19 @@ public class ProductController {
     @PutMapping("/{productId}/{userId}")
     public ProductDto updateProduct(@PathVariable String productId, @PathVariable Long userId, @RequestBody ProductCommand product) {
         return apiProductService.updateProduct(productId, userId, product);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable String id) {
+        apiProductService.deleteProduct(id);
+    }
+    @PostMapping("/revision/filter")
+    public List<ProductDto> getProductRevisionForUser(@RequestBody SearchRequest request) {
+        return apiProductService.getProductRevision(request);
+    }
+
+    @GetMapping("/types")
+    public List<ProductTypeDto> getProductTypes() {
+        return apiProductService.getProductTypes();
     }
 }

@@ -55,6 +55,21 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.updateProduct(product);
     }
 
+    @Override
+    public List<Product> getProductRevision(SearchRequest request) {
+        return productRepository.getProductRevision(request);
+    }
+
+    @Override
+    public List<ProductType> getProductTypes() {
+        return productRepository.getProductTypes();
+    }
+
+    @Override
+    public void deleteProduct(String id) {
+        productRepository.deleteProduct(id);
+    }
+
     private void saveCharacteristics(Product product, List<Characteristic> characteristics) {
         if (characteristics == null) return;
 

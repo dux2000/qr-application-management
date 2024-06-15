@@ -81,6 +81,7 @@ CREATE TABLE product (
     name VARCHAR(50),
     description VARCHAR(255),
     status_code VARCHAR(50),
+    type_code VARCHAR(50),
     customer_id INT,
     current_user_id INT,
     created TIMESTAMP,
@@ -93,6 +94,7 @@ CREATE TABLE product (
     FOREIGN KEY (status_code) REFERENCES status (code),
     FOREIGN KEY (created_by) REFERENCES "user" (id),
     FOREIGN KEY (updated_by) REFERENCES "user" (id),
+    FOREIGN KEY (type_code) REFERENCES product_type (code);
 )
 
 CREATE TABLE characteristics (
@@ -143,6 +145,7 @@ CREATE TABLE product_aud (
                          name VARCHAR(50),
                          description VARCHAR(255),
                          status_code VARCHAR(50),
+                         type_code VARCHAR(50),
                          customer_id INT,
                          current_user_id INT,
                          created TIMESTAMP,
@@ -153,3 +156,18 @@ CREATE TABLE product_aud (
                          primary key (id, rev),
     foreign key (rev) references revinfo
 )
+
+create table product_type (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(50) UNIQUE,
+    name VARCHAR(50),
+);
+
+insert into product_type (id, code, name) values (1, 'T_SHIRT', 'Majica kratkih rukava');
+insert into product_type (id, code, name) values (2, 'LONG_SHIRT', 'Majica dugih rukava');
+insert into product_type (id, code, name) values (3, 'SHORTS', 'Kratke hlače');
+insert into product_type (id, code, name) values (4, 'JEANS', 'Traperice');
+insert into product_type (id, code, name) values (5, 'HOODIE', 'Hudica');
+insert into product_type (id, code, name) values (6, 'DRESS', 'Haljina');
+insert into product_type (id, code, name) values (7, 'JACKET', 'Jakna');
+insert into product_type (id, code, name) values (8, 'PANTIES', 'Gaće');

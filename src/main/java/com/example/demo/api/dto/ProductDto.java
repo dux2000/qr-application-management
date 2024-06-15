@@ -12,6 +12,7 @@ public class ProductDto {
     private String description;
     private List<CharacteristicDto> characteristics;
     private StatusDto status;
+    private ProductTypeDto type;
     private CustomerReferenceDto customer;
     private UserReferenceDto currentUser;
     private LocalDateTime created;

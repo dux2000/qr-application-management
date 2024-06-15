@@ -29,6 +29,11 @@ public class ProductEntity {
     @Audited(targetAuditMode = NOT_AUDITED)
     private StatusEntity status;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "type_code", referencedColumnName = "code")
+    @Audited(targetAuditMode = NOT_AUDITED)
+    private ProductTypeEntity type;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     @Audited(targetAuditMode = NOT_AUDITED)

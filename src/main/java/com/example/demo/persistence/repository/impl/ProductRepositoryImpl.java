@@ -1,30 +1,29 @@
 package com.example.demo.persistence.repository.impl;
 
-import com.example.demo.domain.filter.SearchRequest;
-import com.example.demo.domain.filter.SearchResponse;
+import com.example.demo.domain.filter.*;
 import com.example.demo.domain.model.Product;
+import com.example.demo.domain.model.ProductType;
 import com.example.demo.domain.repository.ProductRepository;
-import com.example.demo.persistence.entity.CustomerEntity;
-import com.example.demo.persistence.entity.ProductEntity;
-import com.example.demo.persistence.entity.StatusEntity;
-import com.example.demo.persistence.entity.UserEntity;
-import com.example.demo.persistence.repository.CustomerEntityRepository;
-import com.example.demo.persistence.repository.ProductEntityRepository;
-import com.example.demo.persistence.repository.StatusEntityRepository;
-import com.example.demo.persistence.repository.UserEntityRepository;
-import com.example.demo.persistence.repository.factory.CustomerFactory;
+import com.example.demo.persistence.entity.*;
+import com.example.demo.persistence.repository.*;
 import com.example.demo.persistence.repository.factory.ProductFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.order.AuditOrder;
-import org.hibernate.query.Order;
+import org.hibernate.envers.query.AuditQuery;
+import org.hibernate.envers.query.criteria.AuditCriterion;
+import org.hibernate.envers.query.criteria.AuditProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,8 +34,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final CustomerEntityRepository customerEntityRepository;
     private final UserEntityRepository userEntityRepository;
     private final StatusEntityRepository statusEntityRepository;
+    private final ProductTypeEntityRepository productTypeEntityRepository;
     private final EntityManager entityManager;
-
     @Override
     public Product getProductById(String id) {
         return productEntityRepository.findById(UUID.fromString(id))
@@ -67,12 +66,19 @@ public class ProductRepositoryImpl implements ProductRepository {
         Optional<UserEntity> currentUserEntity = userEntityRepository.findById(product.getCurrentUser().getId());
         Optional<UserEntity> createdUserEntity = userEntityRepository.findById(product.getCreatedBy().getId());
         Optional<StatusEntity> statusEntity = statusEntityRepository.findByCode(product.getStatus().getCode());
+        Optional<ProductTypeEntity> productTypeEntity = productTypeEntityRepository.findByCode(product.getType().getCode());
 
         ProductEntity productEntity = ProductFactory.fromProductToEntity(product);
         customerEntity.ifPresent(productEntity::setCustomer);
         currentUserEntity.ifPresent(productEntity::setCurrentUser);
         statusEntity.ifPresent(productEntity::setStatus);
         createdUserEntity.ifPresent(productEntity::setCreatedBy);
+
+        if (productTypeEntity.isPresent()) {
+            productEntity.setType(productTypeEntity.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no product type with that code!");
+        }
 
         return ProductFactory.fromProductEntityToProduct(productEntityRepository.save(productEntity));
     }
@@ -102,5 +108,102 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
 
         return ProductFactory.fromProductEntityToProduct(productEntityRepository.save(oldProduct.get()));
+    }
+
+    @Override
+    public List<Product> getProductRevision(SearchRequest request) {
+        List<SearchCriteria> searchCriteria = request.getSearchFilter().getSearchCriteria();
+        AuditQuery auditQueryCreator = AuditReaderFactory
+                .get(entityManager)
+                .createQuery()
+                .forRevisionsOfEntity(ProductEntity.class, true, false);
+
+
+        searchCriteria.forEach(criteria -> {
+            if (criteria.getFilterKey().equals("currentUser")) {
+                auditQueryCreator.add(AuditEntity.relatedId("currentUser").eq(criteria.getValue()));
+            }
+            if (criteria.getFilterKey().equals("updated")) {
+                auditQueryCreator.add(AuditEntity.property("updated").ge(LocalDateTime.parse(criteria.getValue().toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
+            }
+            if (criteria.getFilterKey().equals("id")) {
+                auditQueryCreator.add(AuditEntity.id().eq(UUID.fromString((String) criteria.getValue())));
+            }
+        });
+
+        List<ProductEntity> list = auditQueryCreator
+                .add(AuditEntity.property("updated").isNotNull())
+                .addOrder(AuditEntity.property("updated").desc())
+                .getResultList();
+
+        return list.stream().map(ProductFactory::fromProductEntityToProduct).toList();
+    }
+
+    @Override
+    public List<ProductType> getProductTypes() {
+        return productTypeEntityRepository.findAll().stream()
+                .map(ProductFactory::toProductType)
+                .toList();
+    }
+
+    @Override
+    public void deleteProduct(String id) {
+        productEntityRepository.deleteById(UUID.fromString(id));
+    }
+
+    private Class<?> getType(Class<?> initialClass, String filterKey) {
+        Class<?> currentClass = initialClass;
+        for (String part : filterKey.split("\\.")) {
+            try {
+                Field field = currentClass.getDeclaredField(part);
+                currentClass = field.getType();
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return currentClass;
+    }
+
+    private AuditCriterion getAuditCriterion(String filterKey, String operation, Object value, Class<?> type) {
+        switch(Objects.requireNonNull(SearchOperation.getSimpleOperation(operation))) {
+            case EQUAL:
+                if (type.equals(LocalDateTime.class)) {
+                    return AuditEntity.property(filterKey).eq(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                } else {
+                    return AuditEntity.property(filterKey).eq(value);
+                }
+            case GREATER_THAN_EQUAL:
+                if (type.equals(LocalDateTime.class)) {
+                    return AuditEntity.property(filterKey).ge(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                } else {
+                    return AuditEntity.property(filterKey).ge(value);
+                }
+            case GREATER_THAN:
+                if (type.equals(LocalDateTime.class)) {
+                    return AuditEntity.property(filterKey).gt(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                } else {
+                    return AuditEntity.property(filterKey).gt(value);
+                }
+            case LESS_THAN:
+                if (type.equals(LocalDateTime.class)) {
+                    return AuditEntity.property(filterKey).lt(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                } else {
+                    return AuditEntity.property(filterKey).lt(value);
+                }
+            case LESS_THAN_EQUAL:
+                if (type.equals(LocalDateTime.class)) {
+                    return AuditEntity.property(filterKey).le(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                } else {
+                    return AuditEntity.property(filterKey).le(value);
+                }
+            case NOT_EQUAL:
+                if (type.equals(LocalDateTime.class)) {
+                    return AuditEntity.property(filterKey).ne(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                } else {
+                    return AuditEntity.property(filterKey).ne(value);
+                }
+            default:
+                return null;
+        }
     }
 }

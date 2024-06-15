@@ -12,6 +12,7 @@ public class Product {
     private String description;
     private List<Characteristic> characteristics;
     private Status status;
+    private ProductType type;
     private CustomerReference customer;
     private UserReference currentUser;
     private LocalDateTime created;
