@@ -8,22 +8,17 @@ import com.example.demo.persistence.entity.*;
 import com.example.demo.persistence.repository.*;
 import com.example.demo.persistence.repository.factory.ProductFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.JoinType;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
-import org.hibernate.envers.query.criteria.AuditCriterion;
-import org.hibernate.envers.query.criteria.AuditProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -149,61 +144,5 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void deleteProduct(String id) {
         productEntityRepository.deleteById(UUID.fromString(id));
-    }
-
-    private Class<?> getType(Class<?> initialClass, String filterKey) {
-        Class<?> currentClass = initialClass;
-        for (String part : filterKey.split("\\.")) {
-            try {
-                Field field = currentClass.getDeclaredField(part);
-                currentClass = field.getType();
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return currentClass;
-    }
-
-    private AuditCriterion getAuditCriterion(String filterKey, String operation, Object value, Class<?> type) {
-        switch(Objects.requireNonNull(SearchOperation.getSimpleOperation(operation))) {
-            case EQUAL:
-                if (type.equals(LocalDateTime.class)) {
-                    return AuditEntity.property(filterKey).eq(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                } else {
-                    return AuditEntity.property(filterKey).eq(value);
-                }
-            case GREATER_THAN_EQUAL:
-                if (type.equals(LocalDateTime.class)) {
-                    return AuditEntity.property(filterKey).ge(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                } else {
-                    return AuditEntity.property(filterKey).ge(value);
-                }
-            case GREATER_THAN:
-                if (type.equals(LocalDateTime.class)) {
-                    return AuditEntity.property(filterKey).gt(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                } else {
-                    return AuditEntity.property(filterKey).gt(value);
-                }
-            case LESS_THAN:
-                if (type.equals(LocalDateTime.class)) {
-                    return AuditEntity.property(filterKey).lt(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                } else {
-                    return AuditEntity.property(filterKey).lt(value);
-                }
-            case LESS_THAN_EQUAL:
-                if (type.equals(LocalDateTime.class)) {
-                    return AuditEntity.property(filterKey).le(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                } else {
-                    return AuditEntity.property(filterKey).le(value);
-                }
-            case NOT_EQUAL:
-                if (type.equals(LocalDateTime.class)) {
-                    return AuditEntity.property(filterKey).ne(LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                } else {
-                    return AuditEntity.property(filterKey).ne(value);
-                }
-            default:
-                return null;
-        }
     }
 }

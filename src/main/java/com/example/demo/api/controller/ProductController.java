@@ -47,6 +47,7 @@ public class ProductController {
     public void deleteProduct(@PathVariable String id) {
         apiProductService.deleteProduct(id);
     }
+
     @PostMapping("/revision/filter")
     public List<ProductDto> getProductRevisionForUser(@RequestBody SearchRequest request) {
         return apiProductService.getProductRevision(request);
