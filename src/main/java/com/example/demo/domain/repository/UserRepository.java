@@ -9,5 +9,6 @@ public interface UserRepository {
     SearchResponse<User> getUsers(SearchRequest request);
     User createUser(User user);
     User getUserByUsername(String username);
+    User getUserById(Long id);
     User updateUser(User user);
 }

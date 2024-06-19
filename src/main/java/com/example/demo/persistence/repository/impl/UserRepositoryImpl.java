@@ -38,6 +38,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getUserById(Long id) {
+        return UserFactory.fromUserEntityToUser(testIfUserExists(id));
+    }
+
+    @Override
     public User updateUser(User user) {
         UserEntity oldUserEntity = testIfUserExists(user.getId());
         oldUserEntity.setUsername(user.getUsername() == null ? oldUserEntity.getUsername() : user.getUsername());
@@ -45,6 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
         oldUserEntity.setPassword(user.getPassword() == null ? oldUserEntity.getPassword() : user.getPassword());
         oldUserEntity.setRole(user.getRole() == null ? oldUserEntity.getRole() : user.getRole());
         oldUserEntity.setUpdated(LocalDateTime.now());
+        oldUserEntity.setUpdate(user.getUpdate() == null ? oldUserEntity.getUpdate() : user.getUpdate());
 
         return UserFactory.fromUserEntityToUser(userEntityRepository.save(oldUserEntity));
 

@@ -21,13 +21,10 @@ public class UserEntity {
     @Column(name = "fullname")
     private String fullName;
     private String username;
-
     private String password;
-
     private String role;
-
     private LocalDateTime created;
     private LocalDateTime updated;
     private LocalDateTime deleted;
-
+    private Boolean update;
 }

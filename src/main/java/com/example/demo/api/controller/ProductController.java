@@ -49,7 +49,7 @@ public class ProductController {
     }
 
     @PostMapping("/revision/filter")
-    public List<ProductDto> getProductRevisionForUser(@RequestBody SearchRequest request) {
+    public List<ProductDto> getProductRevisionFilter(@RequestBody SearchRequest request) {
         return apiProductService.getProductRevision(request);
     }
 

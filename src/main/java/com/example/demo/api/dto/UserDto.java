@@ -13,4 +13,5 @@ public class UserDto {
     private String fullName;
     private String role;
     private LocalDateTime created;
+    private Boolean update;
 }

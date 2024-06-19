@@ -49,6 +49,7 @@ CREATE TABLE user (
     created TIMESTAMP,
     updated TIMESTAMP,
     deleted TIMESTAMP,
+    update BOOLEAN,
     FOREIGN KEY (role) REFERENCES role (code)
 );
 

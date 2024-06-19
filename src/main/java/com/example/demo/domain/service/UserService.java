@@ -9,4 +9,5 @@ public interface UserService {
     User createUser(User user);
     User loginUser(User user);
     User updateUser(Long id, User user);
+    User changePassword(Long id, String oldPassword, String newPassword);
 }

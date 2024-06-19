@@ -8,4 +8,5 @@ public class UserCommand {
     private String fullName;
     private String password;
     private String role;
+    private Boolean update;
 }

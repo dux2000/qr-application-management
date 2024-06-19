@@ -14,4 +14,5 @@ public class User {
     private String password;
     private LocalDateTime created;
     private String role;
+    private Boolean update;
 }

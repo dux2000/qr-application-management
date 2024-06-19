@@ -50,8 +50,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(Long id, User updatedUser) {
         updatedUser.setId(id);
-        updatedUser.setPassword(updatedUser.getPassword() == null ? null : encryptPassword(updatedUser.getPassword()));
+        updatedUser.setPassword(updatedUser.getPassword() == null || updatedUser.getPassword().isEmpty() ? null : encryptPassword(updatedUser.getPassword()));
         return userRepository.updateUser(updatedUser);
+    }
+
+    @Override
+    public User changePassword(Long id, String oldPassword, String newPassword) {
+        if (oldPassword.equals(newPassword)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password must be different from the old password.");
+        }
+
+        User user = userRepository.getUserById(id);
+        if (!checkPassword(oldPassword, user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password is incorrect.");
+        }
+
+        user.setPassword(encryptPassword(newPassword));
+        user.setUpdate(false);
+
+        return userRepository.updateUser(user);
     }
 
     private void validateCreateUser(User user) {

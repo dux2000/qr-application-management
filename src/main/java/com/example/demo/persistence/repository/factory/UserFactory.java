@@ -16,6 +16,7 @@ public class UserFactory {
         userEntity.setPassword(user.getPassword());
         userEntity.setCreated(LocalDateTime.now());
         userEntity.setRole(user.getRole());
+        userEntity.setUpdate(user.getUpdate());
 
         return userEntity;
     }
@@ -31,6 +32,7 @@ public class UserFactory {
         user.setPassword(userEntity.getPassword());
         user.setCreated(userEntity.getCreated());
         user.setRole(userEntity.getRole());
+        user.setUpdate(userEntity.getUpdate());
 
         return user;
     }

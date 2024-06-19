@@ -1,5 +1,6 @@
 package com.example.demo.api.service.impl;
 
+import com.example.demo.api.command.ChangePasswordCommand;
 import com.example.demo.api.command.UserCommand;
 import com.example.demo.api.dto.UserDto;
 import com.example.demo.api.factory.ApiCustomerFactory;
@@ -35,5 +36,10 @@ public class ApiUserServiceImpl implements ApiUserService {
     @Override
     public UserDto updateUser(Long id, UserCommand updatedUserCommand) {
         return ApiUserFactory.fromUserToDto(userService.updateUser(id, ApiUserFactory.fromUserCommandToUser(updatedUserCommand)));
+    }
+
+    @Override
+    public UserDto changePassword(Long id, ChangePasswordCommand changePasswordCommand) {
+        return ApiUserFactory.fromUserToDto(userService.changePassword(id, changePasswordCommand.getOldPassword(), changePasswordCommand.getNewPassword()));
     }
 }

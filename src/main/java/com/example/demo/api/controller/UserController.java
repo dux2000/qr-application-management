@@ -1,5 +1,6 @@
 package com.example.demo.api.controller;
 
+import com.example.demo.api.command.ChangePasswordCommand;
 import com.example.demo.api.command.UserCommand;
 import com.example.demo.api.dto.UserDto;
 import com.example.demo.api.service.ApiUserService;
@@ -31,6 +32,11 @@ public class UserController {
     @PutMapping("/{id}")
     public UserDto updateUser(@PathVariable Long id, @RequestBody UserCommand updatedUser) {
         return apiUserService.updateUser(id, updatedUser);
+    }
+
+    @PostMapping("/{id}/change-password")
+    public UserDto changePassword(@PathVariable Long id, @RequestBody ChangePasswordCommand user) {
+        return apiUserService.changePassword(id, user);
     }
 
 }

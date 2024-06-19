@@ -15,6 +15,7 @@ public class ApiUserFactory {
         userDto.setFullName(user.getFullName());
         userDto.setCreated(user.getCreated());
         userDto.setRole(user.getRole());
+        userDto.setUpdate(user.getUpdate());
 
         return userDto;
     }
@@ -28,6 +29,7 @@ public class ApiUserFactory {
         user.setFullName(userCommand.getFullName());
         user.setPassword(userCommand.getPassword());
         user.setRole(userCommand.getRole());
+        user.setUpdate(userCommand.getUpdate());
 
         return user;
     }
