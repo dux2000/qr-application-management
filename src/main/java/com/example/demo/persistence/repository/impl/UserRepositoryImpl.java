@@ -5,8 +5,12 @@ import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.User;
 import com.example.demo.domain.repository.UserRepository;
 import com.example.demo.persistence.entity.UserEntity;
+import com.example.demo.persistence.entity.UserTypeDefinitionEntity;
+import com.example.demo.persistence.entity.UserTypeEntity;
 import com.example.demo.persistence.repository.UserEntityRepository;
+import com.example.demo.persistence.repository.UserTypeDefinitionRepository;
 import com.example.demo.persistence.repository.factory.UserFactory;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -20,7 +24,7 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserEntityRepository userEntityRepository;
-
+    private final UserTypeDefinitionRepository userTypeDefinitionRepository;
     @Override
     public SearchResponse<User> getUsers(SearchRequest request) {
         return request.fetchAndConvert(userEntityRepository, UserFactory::fromUserEntityToUser);
@@ -28,7 +32,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User createUser(User user) {
-        return UserFactory.fromUserEntityToUser(userEntityRepository.save(UserFactory.fromUserToUserEntity(user)));
+        UserEntity userEntity = UserFactory.fromUserToUserEntity(user);
+        saveUserTypes(user, userEntity);
+
+        return UserFactory.fromUserEntityToUser(userEntityRepository.save(userEntity));
     }
 
     @Override
@@ -38,6 +45,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public User getUserById(Long id) {
         return UserFactory.fromUserEntityToUser(testIfUserExists(id));
     }
@@ -48,9 +56,12 @@ public class UserRepositoryImpl implements UserRepository {
         oldUserEntity.setUsername(user.getUsername() == null ? oldUserEntity.getUsername() : user.getUsername());
         oldUserEntity.setFullName(user.getFullName() == null ? oldUserEntity.getFullName() : user.getFullName());
         oldUserEntity.setPassword(user.getPassword() == null ? oldUserEntity.getPassword() : user.getPassword());
-        oldUserEntity.setRole(user.getRole() == null ? oldUserEntity.getRole() : user.getRole());
         oldUserEntity.setUpdated(LocalDateTime.now());
         oldUserEntity.setUpdate(user.getUpdate() == null ? oldUserEntity.getUpdate() : user.getUpdate());
+
+        // Clear the old types and add the new ones
+        oldUserEntity.getTypes().clear();
+        saveUserTypes(user, oldUserEntity);
 
         return UserFactory.fromUserEntityToUser(userEntityRepository.save(oldUserEntity));
 
@@ -61,5 +72,19 @@ public class UserRepositoryImpl implements UserRepository {
 
         if(userEntity.isEmpty()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no user with that id!");
         return userEntity.get();
+    }
+
+    private void saveUserTypes(User user, UserEntity userEntity) {
+        user.getTypes().forEach(userType -> {
+            UserTypeEntity userTypeEntity = new UserTypeEntity();
+
+            UserTypeDefinitionEntity userTypeDefinitionEntity = userTypeDefinitionRepository.findById(userType.getCode())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no user type with that code!"));
+
+            userTypeEntity.setUser(userEntity);
+            userTypeEntity.setDefinition(userTypeDefinitionEntity);
+
+            userEntity.getTypes().add(userTypeEntity);
+        });
     }
 }

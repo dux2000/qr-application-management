@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User username attribute must not be empty.");
         } else if (user.getPassword() == null || user.getPassword().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User password attribute must not be empty.");
-        } else if (user.getRole() == null || user.getRole().isEmpty()) {
+        } else if (user.getTypes().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User role attribute must not be empty.");
         } else if(user.getFullName() == null || user.getFullName().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User fullName attribute must not be empty.");

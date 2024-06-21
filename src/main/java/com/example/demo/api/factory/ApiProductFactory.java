@@ -34,10 +34,10 @@ public class ApiProductFactory {
         productDto.setCreated(product.getCreated());
         productDto.setUpdated(product.getUpdated());
         productDto.setCustomer(new CustomerReferenceDto(product.getCustomer().getId(), product.getCustomer().getFullName()));
-        productDto.setCurrentUser(new UserReferenceDto(product.getCurrentUser().getId(), product.getCurrentUser().getFullName(), product.getCurrentUser().getRole()));
-        productDto.setCreatedBy(new UserReferenceDto(product.getCreatedBy().getId(), product.getCreatedBy().getFullName(), product.getCreatedBy().getRole()));
+        productDto.setCurrentUser(new UserReferenceDto(product.getCurrentUser().getId(), product.getCurrentUser().getFullName()));
+        productDto.setCreatedBy(new UserReferenceDto(product.getCreatedBy().getId(), product.getCreatedBy().getFullName()));
         if (product.getUpdatedBy() != null) {
-            productDto.setUpdatedBy(new UserReferenceDto(product.getUpdatedBy().getId(), product.getUpdatedBy().getFullName(), product.getUpdatedBy().getRole()));
+            productDto.setUpdatedBy(new UserReferenceDto(product.getUpdatedBy().getId(), product.getUpdatedBy().getFullName()));
         }
         if (product.getCharacteristics() != null && !product.getCharacteristics().isEmpty())
             productDto.setCharacteristics(product.getCharacteristics().stream().map(ApiProductFactory::toCharacteristicDto).toList());

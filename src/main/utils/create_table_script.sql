@@ -45,12 +45,10 @@ CREATE TABLE user (
     username VARCHAR(255),
     fullname VARCHAR(255),
     password VARCHAR(255),
-    role VARCHAR(50),
     created TIMESTAMP,
     updated TIMESTAMP,
     deleted TIMESTAMP,
-    update BOOLEAN,
-    FOREIGN KEY (role) REFERENCES role (code)
+    update BOOLEAN
 );
 
 INSERT INTO status (code, name, description) VALUES
@@ -125,11 +123,6 @@ VALUES ('VELICINA', 'VELICINA'),
        ('SRCE', 'KAMEN'),
        ('OVAL', 'KAMEN');
 
-CREATE TABLE role (
-    id SERIAL PRIMARY KEY,
-    code VARCHAR(55) UNIQUE
-);
-
 INSERT INTO role (code)
 VALUES ('ADMIN'),('FASER'),('POLIRER'),('RUČNI RAD'),('CNC'),('NARUDŽBA')
 
@@ -172,3 +165,22 @@ insert into product_type (id, code, name) values (5, 'HOODIE', 'Hudica');
 insert into product_type (id, code, name) values (6, 'DRESS', 'Haljina');
 insert into product_type (id, code, name) values (7, 'JACKET', 'Jakna');
 insert into product_type (id, code, name) values (8, 'PANTIES', 'Gaće');
+
+CREATE TABLE user_type (
+                           id SERIAL PRIMARY KEY,
+                           user_id BIGINT NOT NULL,
+                           type_code VARCHAR(255) NOT NULL,
+                           FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE,
+                           FOREIGN KEY (type_code) REFERENCES user_type_definition(code) ON DELETE CASCADE
+);
+
+CREATE TABLE user_type_definition (
+                                      code VARCHAR(255) PRIMARY KEY,
+                                    name VARCHAR(255) NOT NULL
+);
+
+INSERT INTO user_type_definition (code, name) VALUES ('ADMIN', 'Administrator');
+INSERT INTO user_type_definition (code, name) VALUES ('NARUDŽBE', 'Narudžbe');
+INSERT INTO user_type_definition (code, name) VALUES ('PEGLANJE', 'Peglanje');
+INSERT INTO user_type_definition (code, name) VALUES ('PRANJE', 'Pranje');
+INSERT INTO user_type_definition (code, name) VALUES ('DOSTAVA', 'Dostava');

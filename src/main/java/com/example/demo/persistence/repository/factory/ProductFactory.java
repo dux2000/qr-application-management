@@ -14,12 +14,12 @@ public class ProductFactory {
         product.setDescription(productEntity.getDescription());
         product.setStatus(StatusFactory.fromStatusEntityToStatus(productEntity.getStatus()));
         product.setCustomer(new CustomerReference(productEntity.getCustomer().getId(), productEntity.getCustomer().getFullName()));
-        product.setCurrentUser(new UserReference(productEntity.getCurrentUser().getId(), productEntity.getCurrentUser().getFullName(), productEntity.getCurrentUser().getRole()));
+        product.setCurrentUser(new UserReference(productEntity.getCurrentUser().getId(), productEntity.getCurrentUser().getFullName()));
         product.setCreated(productEntity.getCreated());
         product.setUpdated(productEntity.getUpdated());
-        product.setCreatedBy(new UserReference(productEntity.getCreatedBy().getId(), productEntity.getCreatedBy().getFullName(), productEntity.getCreatedBy().getRole()));
+        product.setCreatedBy(new UserReference(productEntity.getCreatedBy().getId(), productEntity.getCreatedBy().getFullName()));
         if (productEntity.getUpdatedBy() != null) {
-            product.setUpdatedBy( new UserReference(productEntity.getUpdatedBy().getId(), productEntity.getUpdatedBy().getFullName(), productEntity.getUpdatedBy().getRole()));
+            product.setUpdatedBy( new UserReference(productEntity.getUpdatedBy().getId(), productEntity.getUpdatedBy().getFullName()));
         }
         if (productEntity.getCharacteristics() != null && !productEntity.getCharacteristics().isEmpty()) {
             product.setCharacteristics(productEntity.getCharacteristics().stream().map(CharacteristicFactory::fromCharacteristicEntityToCharacteristic).toList());

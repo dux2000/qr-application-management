@@ -1,7 +1,9 @@
 package com.example.demo.persistence.repository.factory;
 
 import com.example.demo.domain.model.User;
+import com.example.demo.domain.model.UserType;
 import com.example.demo.persistence.entity.UserEntity;
+import com.example.demo.persistence.entity.UserTypeEntity;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +17,6 @@ public class UserFactory {
         userEntity.setFullName(user.getFullName());
         userEntity.setPassword(user.getPassword());
         userEntity.setCreated(LocalDateTime.now());
-        userEntity.setRole(user.getRole());
         userEntity.setUpdate(user.getUpdate());
 
         return userEntity;
@@ -31,9 +32,19 @@ public class UserFactory {
         user.setFullName(userEntity.getFullName());
         user.setPassword(userEntity.getPassword());
         user.setCreated(userEntity.getCreated());
-        user.setRole(userEntity.getRole());
+        user.setTypes(userEntity.getTypes().stream().map(UserFactory::toUserType).toList());
         user.setUpdate(userEntity.getUpdate());
 
         return user;
+    }
+
+    private static UserType toUserType(UserTypeEntity userTypeEntity) {
+        if (userTypeEntity == null) return null;
+
+        UserType userType = new UserType();
+        userType.setCode(userTypeEntity.getDefinition().getCode());
+        userType.setName(userTypeEntity.getDefinition().getName());
+
+        return userType;
     }
 }

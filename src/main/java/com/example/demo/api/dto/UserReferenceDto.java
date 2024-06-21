@@ -8,5 +8,4 @@ import lombok.Data;
 public class UserReferenceDto {
     private Long id;
     private String fullName;
-    private String role;
 }

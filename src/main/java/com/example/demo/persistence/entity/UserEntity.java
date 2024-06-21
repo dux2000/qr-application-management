@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "\"user\"")
@@ -22,7 +24,11 @@ public class UserEntity {
     private String fullName;
     private String username;
     private String password;
-    private String role;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REMOVE }, mappedBy = "user", orphanRemoval = true)
+    private List<UserTypeEntity> types = new ArrayList<>();
+
     private LocalDateTime created;
     private LocalDateTime updated;
     private LocalDateTime deleted;
