@@ -7,6 +7,7 @@ import com.example.demo.domain.filter.SearchRequest;
 import com.example.demo.domain.filter.SearchResponse;
 
 public interface ApiUserService {
+    UserDto getUser(Long id);
     SearchResponse<UserDto> getUsers(SearchRequest request);
     UserDto createUser(UserCommand userCommand);
     UserDto loginUser(UserCommand userCommand);

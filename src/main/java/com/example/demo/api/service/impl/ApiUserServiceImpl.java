@@ -19,6 +19,11 @@ public class ApiUserServiceImpl implements ApiUserService {
     private final UserService userService;
 
     @Override
+    public UserDto getUser(Long id) {
+        return ApiUserFactory.fromUserToDto(userService.getUser(id));
+    }
+
+    @Override
     public SearchResponse<UserDto> getUsers(SearchRequest request) {
         return userService.getUsers(request).convert(ApiUserFactory::fromUserToDto);
     }

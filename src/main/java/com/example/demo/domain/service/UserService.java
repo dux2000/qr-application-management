@@ -5,6 +5,7 @@ import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.User;
 
 public interface UserService {
+    User getUser(Long id);
     SearchResponse<User> getUsers(SearchRequest request);
     User createUser(User user);
     User loginUser(User user);

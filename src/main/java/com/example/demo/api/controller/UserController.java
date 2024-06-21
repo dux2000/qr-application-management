@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final ApiUserService apiUserService;
+
+    @GetMapping("/{id}")
+    public UserDto getUser(@PathVariable Long id) {
+        return apiUserService.getUser(id);
+    }
+
     @PostMapping("/filter")
     public SearchResponse<UserDto> getUsers(@RequestBody SearchRequest request) {
         return apiUserService.getUsers(request);

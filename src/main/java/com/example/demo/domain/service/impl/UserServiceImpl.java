@@ -18,6 +18,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    public User getUser(Long id) {
+        return userRepository.getUserById(id);
+    }
+
+    @Override
     public SearchResponse<User> getUsers(SearchRequest request) {
         return userRepository.getUsers(request);
     }
