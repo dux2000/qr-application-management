@@ -3,13 +3,17 @@ package com.example.demo.domain.service.impl;
 import com.example.demo.domain.filter.SearchRequest;
 import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.User;
+import com.example.demo.domain.model.UserType;
 import com.example.demo.domain.repository.UserRepository;
 import com.example.demo.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.usertype.UserTypeSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +61,11 @@ public class UserServiceImpl implements UserService {
         updatedUser.setId(id);
         updatedUser.setPassword(updatedUser.getPassword() == null || updatedUser.getPassword().isEmpty() ? null : encryptPassword(updatedUser.getPassword()));
         return userRepository.updateUser(updatedUser);
+    }
+
+    @Override
+    public List<UserType> getUserTypes() {
+        return userRepository.getUserTypes();
     }
 
     @Override

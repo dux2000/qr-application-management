@@ -40,7 +40,7 @@ public class ApiUserFactory {
         return user;
     }
 
-    private static UserTypeDto toUserTypeDto(UserType userType) {
+    public static UserTypeDto toUserTypeDto(UserType userType) {
         if (userType == null) return null;
 
         UserTypeDto userTypeDto = new UserTypeDto();

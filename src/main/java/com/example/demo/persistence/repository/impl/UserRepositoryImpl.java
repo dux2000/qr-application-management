@@ -3,6 +3,7 @@ package com.example.demo.persistence.repository.impl;
 import com.example.demo.domain.filter.SearchRequest;
 import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.User;
+import com.example.demo.domain.model.UserType;
 import com.example.demo.domain.repository.UserRepository;
 import com.example.demo.persistence.entity.UserEntity;
 import com.example.demo.persistence.entity.UserTypeDefinitionEntity;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -45,7 +47,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public User getUserById(Long id) {
         return UserFactory.fromUserEntityToUser(testIfUserExists(id));
     }
@@ -65,6 +66,11 @@ public class UserRepositoryImpl implements UserRepository {
 
         return UserFactory.fromUserEntityToUser(userEntityRepository.save(oldUserEntity));
 
+    }
+
+    @Override
+    public List<UserType> getUserTypes() {
+        return userTypeDefinitionRepository.findAll().stream().map(UserFactory::toUserType).toList();
     }
 
     public UserEntity testIfUserExists(Long id) {
