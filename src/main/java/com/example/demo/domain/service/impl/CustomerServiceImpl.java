@@ -2,11 +2,9 @@ package com.example.demo.domain.service.impl;
 
 import com.example.demo.domain.filter.SearchRequest;
 import com.example.demo.domain.filter.SearchResponse;
-import com.example.demo.domain.model.Clothes;
 import com.example.demo.domain.model.Contact;
 import com.example.demo.domain.model.Customer;
 import com.example.demo.domain.model.CustomerReference;
-import com.example.demo.domain.repository.ClothesRepository;
 import com.example.demo.domain.repository.ContactRepository;
 import com.example.demo.domain.repository.CustomerRepository;
 import com.example.demo.domain.service.CustomerService;
@@ -23,7 +21,6 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final ClothesRepository clothesRepository;
     private final ContactRepository contactRepository;
 
     @Override
@@ -45,7 +42,6 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer createCustomer(Customer customer) {
         validateCustomer(customer);
         Customer createdCustomer = customerRepository.createCustomer(customer);
-        saveClothes(createdCustomer, customer.getClothes());
         saveContacts(createdCustomer, customer.getContacts());
         return createdCustomer;
     }
@@ -55,17 +51,6 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.deleteCustomer(id);
     }
 
-    private void saveClothes(Customer customer, List<Clothes> clothes) {
-        if (clothes == null || customer == null || clothes.isEmpty()) return;
-
-        List<Clothes> createdClothes = new ArrayList<>();
-        clothes.forEach(x -> {
-            x.setCustomer(new CustomerReference(customer.getId()));
-            createdClothes.add(clothesRepository.createClothes(x));
-        });
-
-        customer.setClothes(createdClothes);
-    }
 
     private void saveContacts(Customer customer, List<Contact> contacts) {
         if (contacts == null || customer == null || contacts.isEmpty()) return;

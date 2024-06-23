@@ -13,7 +13,6 @@ public class ApiCustomerFactory {
         return new CustomerDto(
             customer.getId(), 
             customer.getFullName(),
-            customer.getClothes() == null ? null : customer.getClothes().stream().map(ApiClothesFactory::fromClothesToDto).toList(),
             customer.getContacts() == null ? null : customer.getContacts().stream().map(ApiContactFactory::fromContactToDto).toList());
     }
     
@@ -25,7 +24,6 @@ public class ApiCustomerFactory {
         return new Customer(
             null, 
             customerCommand.getFullName(),
-            customerCommand.getClothes() == null ? null : customerCommand.getClothes().stream().map(ApiClothesFactory::fromCommandToClothes).toList(),
             customerCommand.getContacts() == null ? null : customerCommand.getContacts().stream().map(ApiContactFactory::fromCommandToContact).toList()
         );
     }

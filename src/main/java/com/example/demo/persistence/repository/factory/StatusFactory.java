@@ -1,7 +1,9 @@
 package com.example.demo.persistence.repository.factory;
 
 import com.example.demo.domain.model.Status;
+import com.example.demo.domain.model.StatusTransition;
 import com.example.demo.persistence.entity.StatusEntity;
+import com.example.demo.persistence.entity.StatusTransitionEntity;
 
 public class StatusFactory {
 
@@ -13,7 +15,18 @@ public class StatusFactory {
         status.setCode(statusEntity.getCode());
         status.setDescription(statusEntity.getDescription());
         status.setName(statusEntity.getName());
+        status.setTransitions(statusEntity.getTransitions() == null ? null : statusEntity.getTransitions().stream().map(StatusFactory::fromStatusTransitionEntityToStatus).toList());
 
         return status;
+    }
+
+    private static StatusTransition fromStatusTransitionEntityToStatus(StatusTransitionEntity statusTransitionEntity) {
+        if (statusTransitionEntity == null)
+            return null;
+
+        return StatusTransition.builder()
+                .code(statusTransitionEntity.getNextStatus().getCode())
+                .name(statusTransitionEntity.getNextStatus().getName())
+                .build();
     }
 }

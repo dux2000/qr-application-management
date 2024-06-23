@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "status")
 @Data
@@ -12,13 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StatusEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "serial")
-    private Long id;
-
     private String code;
 
     private String description;
 
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "currentStatus")
+    private List<StatusTransitionEntity> transitions;
 }

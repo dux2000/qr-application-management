@@ -85,6 +85,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.updateUser(user);
     }
 
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.getUserByUsername(username);
+    }
+
     private void validateCreateUser(User user) {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User must not be null.");

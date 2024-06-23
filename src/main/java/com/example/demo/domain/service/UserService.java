@@ -15,4 +15,5 @@ public interface UserService {
     User updateUser(Long id, User user);
     List<UserType> getUserTypes();
     User changePassword(Long id, String oldPassword, String newPassword);
+    User getUserByUsername(String username);
 }

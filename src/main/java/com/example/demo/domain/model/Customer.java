@@ -10,6 +10,5 @@ import java.util.List;
 public class Customer {
     private Long id;
     private String fullName;
-    private List<Clothes> clothes;
     private List<Contact> contacts;
 }

@@ -7,11 +7,16 @@ import com.example.demo.domain.repository.CharacteristicRepository;
 import com.example.demo.domain.repository.ProductRepository;
 import com.example.demo.domain.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +26,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProductById(String id) {
-        return productRepository.getProductById(id);
+        Product product = productRepository.getProductById(id);
+
+        Set<String> userTypes = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        Set<String> statusCodes = product.getStatus().getTransitions().stream().map(StatusTransition::getCode).collect(Collectors.toSet());
+        List<StatusTransition> statusTransitions = productRepository.getProductStatusTransitionForUserType(userTypes, statusCodes);
+
+        Status status = product.getStatus();
+        status.setTransitions(statusTransitions);
+
+        return product;
     }
 
     @Override

@@ -6,17 +6,21 @@ import com.example.demo.api.dto.UserDto;
 import com.example.demo.api.factory.ApiCustomerFactory;
 import com.example.demo.api.factory.ApiUserFactory;
 import com.example.demo.api.service.ApiUserService;
+import com.example.demo.config.JwtService;
 import com.example.demo.domain.filter.SearchRequest;
 import com.example.demo.domain.filter.SearchResponse;
 import com.example.demo.domain.model.User;
 import com.example.demo.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ApiUserServiceImpl implements ApiUserService {
     private final UserService userService;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public UserDto getUser(Long id) {
@@ -35,7 +39,12 @@ public class ApiUserServiceImpl implements ApiUserService {
 
     @Override
     public UserDto loginUser(UserCommand userCommand) {
-        return ApiUserFactory.fromUserToDto(userService.loginUser(ApiUserFactory.fromUserCommandToUser(userCommand)));
+        User user = userService.loginUser(ApiUserFactory.fromUserCommandToUser(userCommand));
+        var jwtToken = jwtService.generateToken(user);
+
+        UserDto userDto = ApiUserFactory.fromUserToDto(user);
+        userDto.setToken(jwtToken);
+        return userDto;
     }
 
     @Override

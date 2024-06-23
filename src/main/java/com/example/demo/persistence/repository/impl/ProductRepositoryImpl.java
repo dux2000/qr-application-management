@@ -3,10 +3,12 @@ package com.example.demo.persistence.repository.impl;
 import com.example.demo.domain.filter.*;
 import com.example.demo.domain.model.Product;
 import com.example.demo.domain.model.ProductType;
+import com.example.demo.domain.model.StatusTransition;
 import com.example.demo.domain.repository.ProductRepository;
 import com.example.demo.persistence.entity.*;
 import com.example.demo.persistence.repository.*;
 import com.example.demo.persistence.repository.factory.ProductFactory;
+import com.example.demo.persistence.repository.factory.StatusFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
@@ -20,7 +22,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,11 +35,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     private final StatusEntityRepository statusEntityRepository;
     private final ProductTypeEntityRepository productTypeEntityRepository;
     private final EntityManager entityManager;
+    private final UserTypeProductStatusTransitionRepository userTypeProductStatusTransitionRepository;
     @Override
     public Product getProductById(String id) {
-        return productEntityRepository.findById(UUID.fromString(id))
-                .map(ProductFactory::fromProductEntityToProduct)
+        ProductEntity productEntity = productEntityRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no product with that id!"));
+
+        return ProductFactory.fromProductEntityToProduct(productEntity);
     }
 
     @Override
@@ -144,5 +150,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public void deleteProduct(String id) {
         productEntityRepository.deleteById(UUID.fromString(id));
+    }
+
+    @Override
+    public List<StatusTransition> getProductStatusTransitionForUserType(Set<String> userTypes, Set<String> statusCodes) {
+        List<StatusEntity> statusEntities = userTypeProductStatusTransitionRepository.findByUserTypeDefinitionAndStatusCode(userTypes, statusCodes);
+        return statusEntities.stream().map(status -> new StatusTransition(status.getCode(), status.getName())).toList();
     }
 }

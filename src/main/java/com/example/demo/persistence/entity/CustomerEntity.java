@@ -30,9 +30,5 @@ public class CustomerEntity {
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-        CascadeType.REMOVE }, mappedBy = "customer", orphanRemoval = true)
-    private Set<ClothesEntity> clothes = new HashSet<>();
-
     private LocalDateTime deleted;
 }

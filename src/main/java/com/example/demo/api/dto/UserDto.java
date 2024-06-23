@@ -15,4 +15,5 @@ public class UserDto {
     private List<UserTypeDto> types;
     private LocalDateTime created;
     private Boolean update;
+    private String token;
 }
